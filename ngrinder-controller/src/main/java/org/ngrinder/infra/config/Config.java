@@ -280,26 +280,7 @@ public class Config extends AbstractConfig implements ControllerConstants, Clust
 		final LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
 		final JoranConfigurator configurator = new JoranConfigurator();
 		configurator.setContext(context);
-		context.reset();
 		context.putProperty("LOG_LEVEL", verbose ? "DEBUG" : "INFO");
-		File logbackConf = home.getSubFile("logback.xml");
-		try {
-			if (!logbackConf.exists()) {
-				logbackConf = new ClassPathResource("/logback/logback-ngrinder.xml").getFile();
-				if (exHome.exists() && isClustered()) {
-					context.putProperty("LOG_DIRECTORY", exHome.getGlobalLogFile().getAbsolutePath());
-					context.putProperty("SUFFIX", "_" + getRegion());
-				} else {
-					context.putProperty("SUFFIX", "");
-					context.putProperty("LOG_DIRECTORY", home.getGlobalLogFile().getAbsolutePath());
-				}
-			}
-			configurator.doConfigure(logbackConf);
-		} catch (JoranException e) {
-			CoreLogger.LOGGER.error(e.getMessage(), e);
-		} catch (IOException e) {
-			CoreLogger.LOGGER.error(e.getMessage(), e);
-		}
 	}
 
 	/**
